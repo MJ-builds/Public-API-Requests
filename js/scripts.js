@@ -50,8 +50,6 @@ function fetchData(url) {
         data.results.forEach((data) => {
           employees.push(data);
           index++;
-          console.log(data);
-          // console.log(index);
           generateEmployee(data);
         });
       })
@@ -186,7 +184,7 @@ function search() {
   const searchInput = document.getElementById("search-input");
   searchInput.focus(); //start page with searchbar as focus element
 
-  searchInput.addEventListener("keyup", (e) => {
+  searchInput.addEventListener("keyup", () => {
     const searchInputValue = document.getElementById("search-input").value;
 
     //iterate through all 'cards' named class elements
