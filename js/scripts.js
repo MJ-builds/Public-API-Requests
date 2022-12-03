@@ -1,22 +1,28 @@
 let index = -1; //for tracking clicked employee (for modal)
-const urlAPI = "https://randomuser.me/api/?results=12";
+const urlAPI = "https://randomuser.me/api/?results=12"; //url with 12 random employees
 let modalContainer = document.querySelector(".modal-container");
+let searchContainer = document.querySelector(".search-container");
 modalContainer.hidden = true;
 let gallery = document.getElementById("gallery");
-let cards = document.getElementsByClassName("card");
+let employeeCards = document.getElementsByClassName("card");
 let employees = []; //to hold our array
 
+//generate & populate employee 'cards' function
 function generateEmployee(data) {
   //let html = ``;
   //add + ${index}
-  let html = `<div class="card" IndexAPI=${index}> 
+  let html = `<div class="card" IndexAPI=${index} searchFirstName= ${data.name.first.toLowerCase()} searchLastName=${data.name.last.toLowerCase()}> 
   <div class="card-img-container">
       <img class="card-img" src="${data.picture.large}" alt="profile picture">
   </div>
   <div class="card-info-container">
-      <h3 id="name" class="card-name cap">${data.name.first} ${data.name.last}</h3>
+      <h3 id="name" class="card-name cap">${data.name.first} ${
+    data.name.last
+  }</h3>
       <p id='email' class="card-text">${data.email}</p>
-      <p id ='citystate' class="card-text cap">${data.location.city}, ${data.location.state}</p>
+      <p id ='citystate' class="card-text cap">${data.location.city}, ${
+    data.location.state
+  }</p>
   </div>
   </div>`;
   //add the above to the page
@@ -32,6 +38,7 @@ function checkStatus(response) {
   }
 }
 
+//too much in this function - move out
 function fetchData(url) {
   return (
     fetch(url)
@@ -43,7 +50,7 @@ function fetchData(url) {
         data.results.forEach((data) => {
           employees.push(data);
           index++;
-          // console.log(data);
+          console.log(data);
           // console.log(index);
           generateEmployee(data);
         });
@@ -56,7 +63,6 @@ function fetchData(url) {
             let cardIndex = card.getAttribute("IndexAPI");
             //console.log(card.getAttribute("IndexAPI"));
             employeeModal(cardIndex);
-            //console.log(employees); //testing
           }
         })
       )
@@ -64,6 +70,7 @@ function fetchData(url) {
   );
 }
 
+//modal function
 function employeeModal(index) {
   let empCard = document.querySelector(`[IndexAPI='${index}']`);
   let empIndex = empCard.getAttribute("IndexAPI");
@@ -71,7 +78,17 @@ function employeeModal(index) {
 
   //clean these vars'. Create a helper function or var to take care of this long repetition.
   //probs dont need these...
-  let firstName,lastName,picture,email,city,state,streetNum,streetName,postcode,cell,dob;
+  let firstName,
+    lastName,
+    picture,
+    email,
+    city,
+    state,
+    streetNum,
+    streetName,
+    postcode,
+    cell,
+    dob;
 
   function employeeAssigner() {
     firstName = individual.name.first;
@@ -92,8 +109,10 @@ function employeeModal(index) {
     document.getElementById("email").innerHTML = `${email}`;
     document.getElementById("city").innerHTML = `${city}`;
     document.getElementById("cell").innerHTML = `${cell}`;
-    document.getElementById("address").innerHTML = `${streetNum} ${streetName}, ${city}, ${state} ${postcode}`;
-    document.getElementById("dateofbirth").innerHTML = `${dob}`;
+    document.getElementById(
+      "address"
+    ).innerHTML = `${streetNum} ${streetName}, ${city}, ${state} ${postcode}`;
+    document.getElementById("dateofbirth").innerHTML = `Birthday: ${dob.substr(5,2)}/${dob.substr(8,2)}/${dob.substr(0,4)}`;
   }
   employeeAssigner();
 
@@ -108,7 +127,7 @@ function employeeModal(index) {
                         <hr>
                         <p id="cell" class="modal-text">${cell}</p>
                         <p id="address" class="modal-text">${streetNum} ${streetName}, ${city}, ${state} ${postcode}</p>
-                        <p id="dateofbirth" class="modal-text">Birthday: ${dob}</p>
+                        <p id="dateofbirth" class="modal-text">Birthday: ${dob.substr(5,2)}/${dob.substr(8,2)}/${dob.substr(0,4)}</p>
                     </div>
                 </div>
                 <div class="modal-btn-container">
@@ -117,8 +136,8 @@ function employeeModal(index) {
                 </div>
             </div>
                 `;
-//see index comments - as far as i know, this(modal) needs to be APPENDED (and not innerhtml)
-  modalContainer.innerHTML = html;
+
+  modalContainer.innerHTML=html;
   modalContainer.hidden = false;
 
   //for exiting the modal
@@ -132,7 +151,8 @@ function employeeModal(index) {
   let count = 0;
 
   modalBtnContainer.addEventListener("click", (e) => {
-    if (empIndex > 0) { //only run the below code if there is a 'next' employee
+    if (empIndex > 0) {
+      //only run the below code if there is a 'next' employee
       if (e.target === modalPrevious) {
         count--;
         empIndex = empCard.getAttribute("IndexAPI");
@@ -142,7 +162,8 @@ function employeeModal(index) {
         employeeUpdater();
       }
     }
-      if(empIndex < (employees.length)-1){ //only run the below code if there is a 'next' employee
+    if (empIndex < employees.length - 1) {
+      //only run the below code if there is a 'next' employee
       if (e.target === modalNext) {
         count++;
         empIndex = empCard.getAttribute("IndexAPI");
@@ -152,8 +173,46 @@ function employeeModal(index) {
         employeeUpdater();
       }
     }
-    
   });
 }
-//run the fetchData function 
+//search function
+function search() {
+  let html = `<form action="#" method="get">
+  <input type="search" id="search-input" class="search-input" placeholder="Search...">
+  <input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">
+  </form>`;
+  searchContainer.insertAdjacentHTML("beforeend", html);
+
+  const searchInput = document.getElementById("search-input");
+  searchInput.focus(); //start page with searchbar as focus element
+
+  searchInput.addEventListener("keyup", (e) => {
+    const searchInputValue = document.getElementById("search-input").value;
+
+    //iterate through all 'cards' named class elements
+    //retrieve both first and last names (searchFirstName/searchLastName attributes) of each employee
+    for (const employee of employeeCards) {
+      const firstName = employee.getAttribute("searchFirstName");
+      const lastName = employee.getAttribute("searchLastName");
+      let fullName = '';
+      fullName = firstName + " " + lastName;
+
+      /*if the search input value includes letters of the first or last name,
+      display the 'found' employees card, and hide the rest, else hide-all */
+      if (
+        firstName.includes(searchInputValue) ||
+        lastName.includes(searchInputValue) ||
+        fullName.includes(searchInputValue) ||
+        searchInput == " " // not sure if necessary to include 
+      ) {
+        employee.style.display = "flex";
+      } else {
+        employee.style.display = "none";
+      }
+    }   
+  });
+}
+//initialise the search function
+search();
+//initialise the fetchData function
 fetchData(urlAPI);
