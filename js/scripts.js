@@ -1,4 +1,4 @@
-let index = -1;
+let index = -1; //for tracking clicked employee (for modal)
 const urlAPI = "https://randomuser.me/api/?results=12";
 let modalContainer = document.querySelector(".modal-container");
 modalContainer.hidden = true;
@@ -53,16 +53,10 @@ function fetchData(url) {
         gallery.addEventListener("click", (e) => {
           if (e.target.closest(".card")) {
             const card = e.target.closest(".card");
-            const cardIndex = card.getAttribute("IndexAPI");
-            console.log(card.getAttribute("IndexAPI"));
-            employeeModal(cardIndex); //testing
-            console.log(employees);
-
-            //for exiting the modal
-            const quitModal = document.querySelector(".modal-close-btn");
-            quitModal.addEventListener("click", (e) => {
-              modalContainer.hidden = true;
-            });
+            let cardIndex = card.getAttribute("IndexAPI");
+            //console.log(card.getAttribute("IndexAPI"));
+            employeeModal(cardIndex);
+            //console.log(employees); //testing
           }
         })
       )
@@ -71,41 +65,95 @@ function fetchData(url) {
 }
 
 function employeeModal(index) {
-  const empCard = document.querySelector(`[IndexAPI='${index}']`);
-  const empIndex = empCard.getAttribute("IndexAPI");
+  let empCard = document.querySelector(`[IndexAPI='${index}']`);
+  let empIndex = empCard.getAttribute("IndexAPI");
+  let individual = employees[empIndex]; //better var
+
   //clean these vars'. Create a helper function or var to take care of this long repetition.
   //probs dont need these...
-  const firstName = employees[empIndex].name.first;
-  const lastName = employees[empIndex].name.last;
-  const picture = employees[empIndex].picture.large;
-  const email = employees[empIndex].email;
-  const city = employees[empIndex].location.city;
-  const state = employees[empIndex].location.state;
-  const streetNum = employees[empIndex].location.street.number;
-  const streetName = employees[empIndex].location.street.name;
-  const postcode = employees[empIndex].location.postcode;
-  const cell = employees[empIndex].cell; //note THIS FORMAT NEEDS TO CHANGE To eg: (555) 555-5555
-  const dob = employees[empIndex].dob.date; //note THIS FORMAT NEEDS TO CHANGE To eg: 10/21/2015
+  let firstName,lastName,picture,email,city,state,streetNum,streetName,postcode,cell,dob;
+
+  function employeeAssigner() {
+    firstName = individual.name.first;
+    lastName = individual.name.last;
+    picture = individual.picture.large;
+    email = individual.email;
+    city = individual.location.city;
+    state = individual.location.state;
+    streetNum = individual.location.street.number;
+    streetName = individual.location.street.name;
+    postcode = individual.location.postcode;
+    cell = individual.cell; //note THIS FORMAT NEEDS TO CHANGE To eg: (555) 555-5555
+    dob = individual.dob.date; //note THIS FORMAT NEEDS TO CHANGE To eg: 10/21/2015
+  }
+  function employeeUpdater() {
+    document.getElementById("picture").src = picture;
+    document.getElementById("name").innerHTML = `${firstName} ${lastName}`;
+    document.getElementById("email").innerHTML = `${email}`;
+    document.getElementById("city").innerHTML = `${city}`;
+    document.getElementById("cell").innerHTML = `${cell}`;
+    document.getElementById("address").innerHTML = `${streetNum} ${streetName}, ${city}, ${state} ${postcode}`;
+    document.getElementById("dateofbirth").innerHTML = `${dob}`;
+  }
+  employeeAssigner();
 
   let html = `
                 <div class="modal">
                     <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
                     <div class="modal-info-container">
-                        <img class="modal-img" src="${picture}" alt="profile picture">
+                        <img id="picture" class="modal-img" src="${picture}" alt="profile picture">
                         <h3 id="name" class="modal-name cap">${firstName} ${lastName}</h3>
-                        <p class="modal-text">${email}</p>
-                        <p class="modal-text cap">${city}</p>
+                        <p id ="email" class="modal-text">${email}</p>
+                        <p id= "city" class="modal-text cap">${city}</p>
                         <hr>
-                        <p class="modal-text">${cell}</p>
-                        <p class="modal-text">${streetNum} ${streetName}, ${city}, ${state} ${postcode}</p>
-                        <p class="modal-text">Birthday: ${dob}</p>
+                        <p id="cell" class="modal-text">${cell}</p>
+                        <p id="address" class="modal-text">${streetNum} ${streetName}, ${city}, ${state} ${postcode}</p>
+                        <p id="dateofbirth" class="modal-text">Birthday: ${dob}</p>
                     </div>
                 </div>
+                <div class="modal-btn-container">
+                    <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+                    <button type="button" id="modal-next" class="modal-next btn">Next</button>
+                </div>
+            </div>
                 `;
-  //clean this up.
+//see index comments - as far as i know, this(modal) needs to be APPENDED (and not innerhtml)
   modalContainer.innerHTML = html;
   modalContainer.hidden = false;
-}
 
-//fetching 12 employees at a time - per screenshots (12 required)
+  //for exiting the modal
+  const quitModal = document.querySelector(".modal-close-btn");
+  quitModal.addEventListener("click", (e) => {
+    modalContainer.hidden = true;
+  });
+  const modalBtnContainer = document.querySelector(".modal-btn-container");
+  const modalPrevious = document.getElementById("modal-prev");
+  const modalNext = document.getElementById("modal-next");
+  let count = 0;
+
+  modalBtnContainer.addEventListener("click", (e) => {
+    if (empIndex > 0) { //only run the below code if there is a 'next' employee
+      if (e.target === modalPrevious) {
+        count--;
+        empIndex = empCard.getAttribute("IndexAPI");
+        empIndex = parseInt(empIndex) + count;
+        individual = employees[empIndex];
+        employeeAssigner();
+        employeeUpdater();
+      }
+    }
+      if(empIndex < (employees.length)-1){ //only run the below code if there is a 'next' employee
+      if (e.target === modalNext) {
+        count++;
+        empIndex = empCard.getAttribute("IndexAPI");
+        empIndex = parseInt(empIndex) + count;
+        individual = employees[empIndex];
+        employeeAssigner();
+        employeeUpdater();
+      }
+    }
+    
+  });
+}
+//run the fetchData function 
 fetchData(urlAPI);
