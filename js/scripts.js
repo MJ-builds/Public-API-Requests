@@ -1,15 +1,21 @@
-let index = -1; //for tracking clicked employee (for modal)
-const urlAPI = "https://randomuser.me/api/?results=12"; //url with 12 random employees
+//to hold our array
+let employees = []; 
+//url with 12 random employees
+const url = "https://randomuser.me/api/?results=12"; 
+//for tracking clicked employee (for modal)
+let index = -1; 
+
+let gallery = document.getElementById("gallery");
 let modalContainer = document.querySelector(".modal-container");
 let searchContainer = document.querySelector(".search-container");
-modalContainer.hidden = true;
-let gallery = document.getElementById("gallery");
 let employeeCards = document.getElementsByClassName("card");
-let employees = []; //to hold our array
+
+//modal init as hidden
+modalContainer.hidden = true;
 
 //generate & populate employee 'cards' function
 function generateEmployee(data) {
-  
+
   let html = `<div class="card" IndexAPI=${index} searchFirstName= ${data.name.first.toLowerCase()} searchLastName=${data.name.last.toLowerCase()}> 
   <div class="card-img-container">
       <img class="card-img" src="${data.picture.large}" alt="profile picture">
@@ -52,17 +58,6 @@ function fetchData(url) {
           generateEmployee(data);
         });
       })
-      //putting this in here for now so that i can get the data to link...commented out below
-      .then(
-        gallery.addEventListener("click", (e) => {
-          if (e.target.closest(".card")) {
-            const card = e.target.closest(".card");
-            let cardIndex = card.getAttribute("IndexAPI");
-            //console.log(card.getAttribute("IndexAPI"));
-            employeeModal(cardIndex);
-          }
-        })
-      )
       .catch((error) => console.log("Looks like there was a problem!", error))
   );
 }
@@ -73,19 +68,7 @@ function employeeModal(index) {
   let empIndex = empCard.getAttribute("IndexAPI");
   let individual = employees[empIndex]; //better var
 
-  //clean these vars'. Create a helper function or var to take care of this long repetition.
-  //probs dont need these...
-  let firstName,
-    lastName,
-    picture,
-    email,
-    city,
-    state,
-    streetNum,
-    streetName,
-    postcode,
-    cell,
-    dob;
+  let firstName,lastName,picture,email,city,state,streetNum,streetName,postcode,cell,dob;
 
   function employeeAssigner() {
     firstName = individual.name.first;
@@ -137,6 +120,16 @@ function employeeModal(index) {
   modalContainer.innerHTML=html;
   modalContainer.hidden = false;
 
+
+function modalNavigator (countDirection) {
+      countDirection;
+      empIndex = empCard.getAttribute("IndexAPI");
+      empIndex = parseInt(empIndex) + count;
+      individual = employees[empIndex];
+      employeeAssigner();
+      employeeUpdater();
+}
+
   //for exiting the modal
   const quitModal = document.querySelector(".modal-close-btn");
   quitModal.addEventListener("click", (e) => {
@@ -151,23 +144,13 @@ function employeeModal(index) {
     if (empIndex > 0) {
       //only run the below code if there is a 'next' employee
       if (e.target === modalPrevious) {
-        count--;
-        empIndex = empCard.getAttribute("IndexAPI");
-        empIndex = parseInt(empIndex) + count;
-        individual = employees[empIndex];
-        employeeAssigner();
-        employeeUpdater();
+        modalNavigator(count--);
       }
     }
     if (empIndex < employees.length - 1) {
       //only run the below code if there is a 'next' employee
       if (e.target === modalNext) {
-        count++;
-        empIndex = empCard.getAttribute("IndexAPI");
-        empIndex = parseInt(empIndex) + count;
-        individual = employees[empIndex];
-        employeeAssigner();
-        employeeUpdater();
+        modalNavigator(count++);
       }
     }
   });
@@ -209,7 +192,23 @@ function search() {
     }   
   });
 }
-//initialise the search function
-search();
-//initialise the fetchData function
-fetchData(urlAPI);
+function cardClickHandler (e) {
+  if (e.target.closest(".card")) {
+    const card = e.target.closest(".card");
+    let cardIndex = card.getAttribute("IndexAPI");
+    //console.log(card.getAttribute("IndexAPI"));
+    employeeModal(cardIndex);
+  }
+}
+function EmployeePackageInit () {
+  //initialise the fetchData function
+  fetchData(url);
+  //initialise the search function
+  search();
+  // Add event listener
+  gallery.addEventListener("click", cardClickHandler);
+}
+//initialise
+EmployeePackageInit ();
+
+
