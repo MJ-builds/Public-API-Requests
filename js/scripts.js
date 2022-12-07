@@ -9,8 +9,7 @@ let employees = []; //to hold our array
 
 //generate & populate employee 'cards' function
 function generateEmployee(data) {
-  //let html = ``;
-  //add + ${index}
+  
   let html = `<div class="card" IndexAPI=${index} searchFirstName= ${data.name.first.toLowerCase()} searchLastName=${data.name.last.toLowerCase()}> 
   <div class="card-img-container">
       <img class="card-img" src="${data.picture.large}" alt="profile picture">

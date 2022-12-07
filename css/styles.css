@@ -16,8 +16,8 @@ html, body {
 body {
     font-family: "Nunito", sans-serif;
     text-align: center;
-    background: #FFFAFB; /* modified colour*/
-    color: #339989; /* modified*/
+    background: #e2e8f0; /* modified colour*/
+    color: #000000; /* modified*/
 }
 
 header {
@@ -37,14 +37,14 @@ header h1 {
 
 .search-input {
     padding: 0.4rem 1rem;
-    border: 1px solid #339989; /* modified*/
+    border: 1px solid #0ea5e9; /* modified*/
     border-radius: 0.25rem 0 0 0.25rem ;
     max-width: 20rem;
     transition: .4s ease-out;
 }
 
 .search-input:active, .search-input:hover, .search-input:focus {
-    border: 1px solid #339989; /* modified*/
+    border: 1px solid #0ea5e9; /* modified*/
 }
 
 .search-submit {
@@ -86,9 +86,9 @@ header h1 {
     max-width: 360px;
     margin: 10px 10px 20px;
     padding: 10px;
-    background: #EDE8E9; /* modified*/
+    background: #f1f5f9; /* modified*/
     border-radius: 0.25em;
-    border: 1px solid #2B2C28; /* modified*/
+    border: 1px solid #f8fafc; /* modified*/
     transition: .4s ease-out;
     overflow: hidden;
 }
@@ -117,6 +117,10 @@ header h1 {
 .cap {
     text-transform: capitalize;
 }
+/* added */
+#email {
+    color: #0ea5e9;
+}
 
 
 /* ===================================== 
@@ -139,9 +143,9 @@ header h1 {
     min-height: 415px;
     margin: 10px auto auto;
     padding-bottom: 5px;
-    background: #EDE8E9; /* modified*/
+    background: #f1f5f9; /* modified*/
     border-radius: 0.25em;
-    border: 1px solid rgba(100, 100, 100, 0.3);
+    border: 1px solid #f8fafc;
     transition: .4s ease-out;
 }
 
@@ -151,7 +155,7 @@ header h1 {
     right: 15px;
     cursor: pointer;
     color: rgba(255, 255, 255, 0.9);
-    background: #339989; /* modified*/
+    background: #0ea5e9; /* modified*/
     border-radius: 0.25em;
     border: 1px solid rgba(50, 50, 50, 0.3);
 }
@@ -186,9 +190,9 @@ header h1 {
     max-width: 420px;
     padding: 10px 15px 15px;
     margin: 10px auto auto;
-    background: #EDE8E9; /* modified*/
+    background: #f1f5f9; /* modified*/
     border-radius: 0.25em;
-    border: 1px solid rgba(100, 100, 100, 0.3);
+    border: 1px solid #f8fafc;
 }
 
 
@@ -199,7 +203,7 @@ header h1 {
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.9);
     padding: 0.75em 1.5em;
-    background: #339989; /* modified*/
+    background: #0ea5e9; /* modified*/
     border-radius: 0.35em;
     transition: .4s ease-out;
   }
@@ -236,7 +240,6 @@ header h1 {
     }
 }
 
-
 /* ===================================== 
    Desktop
    Hover styles on desktop 
@@ -245,8 +248,8 @@ header h1 {
 @media (min-width: 1024px) {
 
     .card:hover {
-        background: #B3E6DE; /* modified*/
-        border: 1px solid rgba(50, 50, 50, 0.9);
+        background: #cbd5e1; /* modified*/
+        border: 1px solid #e2e8f0; /* modified*/
     }
 
     .card:hover .card-text {
