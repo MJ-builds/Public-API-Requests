@@ -21,7 +21,7 @@ body {
 }
 
 header {
-    padding: 15px 5px 5px;
+    padding: 5px 5px 5px; /* modified */
     background-color: #94a3b8; /* modified */
 }
 
@@ -31,7 +31,7 @@ header {
 }
 
 header h1 {
-    font-size: 1.25em;
+    font-size: 1.6em; /* modified*/
     color: #cbd5e1; /* modified*/
     margin-top: 30px; /* modified */
 }
@@ -43,6 +43,7 @@ header h1 {
     max-width: 20rem;
     transition: .4s ease-out;
     background-color: #e2e8f0;
+    margin-bottom: 30px; /* modified*/
    
 }
 
