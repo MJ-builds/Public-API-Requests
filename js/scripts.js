@@ -83,7 +83,7 @@ function employeeModal(index) {
 
   let firstName,lastName,picture,email,city,state,streetNum,streetName,postcode,cell,dob;
 
-  //assign employees specific data from the array to related variables.
+  //helper function to assign employees specific data from the array to related variables.
   function employeeAssigner() {
     firstName = individual.name.first;
     lastName = individual.name.last;
@@ -97,8 +97,8 @@ function employeeModal(index) {
     cell = individual.cell;
     dob = individual.dob.date;
   }
-  /* update the employee data when needed (such as when the modal employee changes via nagivation 
-    - ties into the navigation function lower down) */
+  /* helper function to update the employee data when needed (such as when the modal employee changes 
+    via nagivation - ties into the navigation function lower down) */
   function employeeUpdater() {
     document.getElementById("picture").src = picture;
     document.getElementById("name").innerHTML = `${firstName} ${lastName}`;
@@ -157,7 +157,8 @@ function employeeModal(index) {
   //instantiate count for below
   let count = 0;
 
-  //nagivate through the modal and call functions and update count depending on the clicked button
+  /* helper function to nagivate through the modal and call functions and update count 
+  depending on the clicked button */
   function modalNavigator() {
     const modalBtnContainer = document.querySelector(".modal-btn-container");
     const modalPrevious = document.getElementById("modal-prev");
@@ -182,7 +183,7 @@ function employeeModal(index) {
   modalNavigator();
   exitModalClickHandler();
 }
-//search function
+//search functionality enabling function
 function search() {
   let html = `<form action="#" method="get">
   <input type="search" id="search-input" class="search-input" placeholder="Search...">
