@@ -22,6 +22,7 @@ body {
 
 header {
     padding: 15px 5px 5px;
+    background-color: #94a3b8; /* modified */
 }
 
 .header-inner-container {
@@ -31,8 +32,8 @@ header {
 
 header h1 {
     font-size: 1.25em;
-    color: #131515; /* modified*/
-    margin-top: 35px;
+    color: #cbd5e1; /* modified*/
+    margin-top: 30px; /* modified */
 }
 
 .search-input {
@@ -41,6 +42,8 @@ header h1 {
     border-radius: 0.25rem 0 0 0.25rem ;
     max-width: 20rem;
     transition: .4s ease-out;
+    background-color: #e2e8f0;
+   
 }
 
 .search-input:active, .search-input:hover, .search-input:focus {
@@ -74,6 +77,8 @@ header h1 {
     width: 100%;
     max-width: 1200px;
     margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
   
 .card {
@@ -87,7 +92,7 @@ header h1 {
     margin: 10px 10px 20px;
     padding: 10px;
     background: #f1f5f9; /* modified*/
-    border-radius: 0.25em;
+    border-radius: 0.75em; /* modified*/
     border: 1px solid #f8fafc; /* modified*/
     transition: .4s ease-out;
     overflow: hidden;
@@ -155,7 +160,7 @@ header h1 {
     right: 15px;
     cursor: pointer;
     color: rgba(255, 255, 255, 0.9);
-    background: #0ea5e9; /* modified*/
+    background: #94a3b8; /* modified*/
     border-radius: 0.25em;
     border: 1px solid rgba(50, 50, 50, 0.3);
 }
@@ -203,7 +208,7 @@ header h1 {
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.9);
     padding: 0.75em 1.5em;
-    background: #0ea5e9; /* modified*/
+    background: #94a3b8; /* modified*/
     border-radius: 0.35em;
     transition: .4s ease-out;
   }
