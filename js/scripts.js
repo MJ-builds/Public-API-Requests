@@ -1,9 +1,9 @@
-//to hold our array (for modal, not card - inefficient, work on in future update)
+//to hold our array (for modal, not card - inefficient. Self: work on/ consolidate in future update)
 let employees = [];
 //url with 12 random employees, only taking the required data from the API for each
 const url =
   "https://randomuser.me/api/?results=12&inc=picture,name,email,location,cell,dob";
-//for assigning and tracking clicked employee (for modal)
+//for assigning and tracking clicked employee (for modal).
 let index = -1;
 
 let gallery = document.getElementById("gallery");
@@ -71,7 +71,7 @@ function generateEmployee(data) {
     </div>
   </div>
   `;
-  //add the above to the page
+
   gallery.insertAdjacentHTML("beforeend", html);
 }
 
