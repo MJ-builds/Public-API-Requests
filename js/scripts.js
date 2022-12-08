@@ -1,9 +1,10 @@
 //to hold our array (for modal, not card - inefficient, work on in future update)
-let employees = []; 
+let employees = [];
 //url with 12 random employees, only taking the required data from the API for each
-const url = "https://randomuser.me/api/?results=12&inc=picture,name,email,location,cell,dob"; 
-//for tracking clicked employee (for modal)
-let index = -1; 
+const url =
+  "https://randomuser.me/api/?results=12&inc=picture,name,email,location,cell,dob";
+//for assigning and tracking clicked employee (for modal)
+let index = -1;
 
 let gallery = document.getElementById("gallery");
 let modalContainer = document.querySelector(".modal-container");
@@ -14,9 +15,9 @@ let employeeCards = document.getElementsByClassName("card");
 modalContainer.hidden = true;
 
 //initialise
-EmployeePackageInit ();
+EmployeePackageInit();
 
-function EmployeePackageInit () {
+function EmployeePackageInit() {
   //initialise the fetchData function
   fetchData(url);
   //initialise the search function
@@ -34,45 +35,42 @@ function checkStatus(response) {
     return Promise.reject(new Error(response.statusText));
   }
 }
+//move some of this code to existing functions in a future update - unneccessarily messy.
 function fetchData(url) {
-  return (
-    fetch(url)
-      .then(checkStatus)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        data.results.forEach((data) => {
-          //push each employee to the array
-          employees.push(data); 
-          //to assign an index number for each employee generated
-          index++; 
-          //run the function and generate cards with employees on each iteration
-          generateEmployee(data);
-        });
-      })
-      .catch((error) => console.log("Looks like there was a problem!", error))
-  );
+  return fetch(url)
+    .then(checkStatus)
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      data.results.forEach((data) => {
+        //push each employee to the array
+        employees.push(data);
+        //to assign an index number for each employee generated
+        index++;
+        //run the function and generate cards with employees on each iteration
+        generateEmployee(data);
+      });
+    })
+    .catch((error) => console.log("Looks like there was a problem!", error));
 }
 
 //generate html & populate employee 'cards' function
 function generateEmployee(data) {
-
   //added: searchFirstName & searchLastName - used by search function to pull the correctly searched card
-  let html = `<div class="card" IndexAPI=${index} searchFirstName= ${data.name.first.toLowerCase()} searchLastName=${data.name.last.toLowerCase()}> 
-  <div class="card-img-container">
-      <img class="card-img" src="${data.picture.large}" alt="profile picture">
-  </div>
-  <div class="card-info-container">
-      <h3 id="name" class="card-name cap">${data.name.first} ${
-    data.name.last
-  }</h3>
+  let html = `
+  <div 
+    class="card" IndexAPI=${index} searchFirstName= ${data.name.first.toLowerCase()} searchLastName=${data.name.last.toLowerCase()}> 
+    <div class="card-img-container">
+        <img class="card-img" src="${data.picture.large}" alt="profile picture">
+      </div>
+      <div class="card-info-container">
+        <h3 id="name" class="card-name cap">${data.name.first} ${data.name.last}</h3>
       <p id='email' class="card-text">${data.email}</p>
-      <p id ='citystate' class="card-text cap">${data.location.city}, ${
-    data.location.state
-  }</p>
+      <p id ='citystate' class="card-text cap">${data.location.city}, ${data.location.state}</p>
+    </div>
   </div>
-  </div>`;
+  `;
   //add the above to the page
   gallery.insertAdjacentHTML("beforeend", html);
 }
@@ -96,8 +94,8 @@ function employeeModal(index) {
     streetNum = individual.location.street.number;
     streetName = individual.location.street.name;
     postcode = individual.location.postcode;
-    cell = individual.cell; 
-    dob = individual.dob.date; 
+    cell = individual.cell;
+    dob = individual.dob.date;
   }
   /* update the employee data when needed (such as when the modal employee changes via nagivation 
     - ties into the navigation function lower down) */
@@ -107,14 +105,14 @@ function employeeModal(index) {
     document.getElementById("email").innerHTML = `${email}`;
     document.getElementById("city").innerHTML = `${city}`;
     document.getElementById("cell").innerHTML = `${cell}`;
-    document.getElementById(
-      "address"
-    ).innerHTML = `${streetNum} ${streetName}, ${city}, ${state} ${postcode}`;
-    document.getElementById("dateofbirth").innerHTML = `Birthday: ${dob.substr(5,2)}/${dob.substr(8,2)}/${dob.substr(0,4)}`;
+    document.getElementById("address").innerHTML = `${streetNum} ${streetName}, ${city}, ${state} ${postcode}`;
+    document.getElementById("dateofbirth").innerHTML = `Birthday: ${dob.substr(5,2)}/${dob.substr(8, 2)}/${dob.substr(0, 4)}`;
   }
+
   //call function for the first card that is eventually clicked.
   employeeAssigner();
 
+  //populate the modal HTML, with correct employee data
   let html = `
                 <div class="modal">
                     <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
@@ -126,7 +124,7 @@ function employeeModal(index) {
                         <hr>
                         <p id="cell" class="modal-text">${cell}</p>
                         <p id="address" class="modal-text">${streetNum} ${streetName}, ${city}, ${state} ${postcode}</p>
-                        <p id="dateofbirth" class="modal-text">Birthday: ${dob.substr(5,2)}/${dob.substr(8,2)}/${dob.substr(0,4)}</p>
+                        <p id="dateofbirth" class="modal-text">Birthday: ${dob.substr(5,2)}/${dob.substr(8, 2)}/${dob.substr(0, 4)}</p>
                     </div>
                 </div>
                 <div class="modal-btn-container">
@@ -136,55 +134,53 @@ function employeeModal(index) {
             </div>
                 `;
 
-  modalContainer.innerHTML=html;
+  modalContainer.innerHTML = html;
   //show modal
   modalContainer.hidden = false;
 
-//helper function to nagivate 'previous' or 'next' employee on the modal
-function modalDirectionUpdater (countDirection) {
-      countDirection;
-      empIndex = empCard.getAttribute("IndexAPI");
-      empIndex = parseInt(empIndex) + count;
-      individual = employees[empIndex];
-      employeeAssigner();
-      employeeUpdater();
-}
-//helper function to exit the modal by clicking the button (x) on page
- function exitModalClickHandler () {
-  const quitModal = document.querySelector(".modal-close-btn");
-  quitModal.addEventListener("click", (e) => {
-    modalContainer.hidden = true;
-  });
-}
-//instantiate count for below
-let count = 0;
+  //helper function to nagivate 'previous' or 'next' employee on the modal
+  function modalDirectionUpdater(countDirection) {
+    countDirection;
+    empIndex = empCard.getAttribute("IndexAPI");
+    empIndex = parseInt(empIndex) + count;
+    individual = employees[empIndex];
+    employeeAssigner();
+    employeeUpdater();
+  }
+  //helper function to exit the modal by clicking the button (x) on page
+  function exitModalClickHandler() {
+    const quitModal = document.querySelector(".modal-close-btn");
+    quitModal.addEventListener("click", (e) => {
+      modalContainer.hidden = true;
+    });
+  }
+  //instantiate count for below
+  let count = 0;
 
-//nagivate through the modal and call functions and update count depending on the clicked button
-function modalNavigator () {
+  //nagivate through the modal and call functions and update count depending on the clicked button
+  function modalNavigator() {
+    const modalBtnContainer = document.querySelector(".modal-btn-container");
+    const modalPrevious = document.getElementById("modal-prev");
+    const modalNext = document.getElementById("modal-next");
 
-  const modalBtnContainer = document.querySelector(".modal-btn-container");
-  const modalPrevious = document.getElementById("modal-prev");
-  const modalNext = document.getElementById("modal-next");
-  
-
-  modalBtnContainer.addEventListener("click", (e) => {
-    if (empIndex > 0) {
-      //only run the below code if there is a 'next' employee
-      if (e.target === modalPrevious) {
-        modalDirectionUpdater(count--);
+    modalBtnContainer.addEventListener("click", (e) => {
+      if (empIndex > 0) {
+        //only run the below code if there is a 'next' employee
+        if (e.target === modalPrevious) {
+          modalDirectionUpdater(count--);
+        }
       }
-    }
-    if (empIndex < employees.length - 1) {
-      //only run the below code if there is a 'next' employee
-      if (e.target === modalNext) {
-        modalDirectionUpdater(count++);
+      if (empIndex < employees.length - 1) {
+        //only run the below code if there is a 'next' employee
+        if (e.target === modalNext) {
+          modalDirectionUpdater(count++);
+        }
       }
-    }
-  });
-}
-//finally call core functions above
-modalNavigator();
-exitModalClickHandler();
+    });
+  }
+  //finally call core functions above
+  modalNavigator();
+  exitModalClickHandler();
 }
 //search function
 function search() {
@@ -205,7 +201,7 @@ function search() {
     for (const employee of employeeCards) {
       const firstName = employee.getAttribute("searchFirstName");
       const lastName = employee.getAttribute("searchLastName");
-      let fullName = '';
+      let fullName = "";
       fullName = firstName + " " + lastName;
 
       /*if the search input value includes letters of the first or last name,
@@ -219,16 +215,14 @@ function search() {
       } else {
         employee.style.display = "none";
       }
-    }   
+    }
   });
 }
 //helper function for when a specific employee card is clicked, to bring up the modal for that employee
-function cardClickHandler (e) {
+function cardClickHandler(e) {
   if (e.target.closest(".card")) {
     const card = e.target.closest(".card");
     let cardIndex = card.getAttribute("IndexAPI");
     employeeModal(cardIndex);
   }
 }
-
-
